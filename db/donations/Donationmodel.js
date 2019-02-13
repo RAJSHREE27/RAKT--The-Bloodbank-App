@@ -19,8 +19,7 @@ const donationSchema = new mongoose.Schema({
   quantity : {
      type : Number,
      default : 1,
-     min: 1,
-     match : [/^\d+$/, 'Please fill a valid quantity']
+     min: 1
    }
 
 });
