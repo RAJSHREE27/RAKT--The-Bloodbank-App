@@ -1,12 +1,12 @@
-const jwt = require('jsonwebtokens');
+const jwt = require('jsonwebtoken');
 
 let verifyToken = (req, res, next) =>{
    let token = req.headers['authorization'] || req.headers['x-access-token'];
-   if(token.startsWith('Bearer ')){
-     token = token.slice(7 , token.length);
-
-   }
    if(token){
+     if(token.startsWith('Bearer ')){
+       token = token.slice(7 , token.length);
+
+     }
      jwt.verify(token, process.env.SECRET , (err , decoded)=>{
        if(err){
          return res.json({
