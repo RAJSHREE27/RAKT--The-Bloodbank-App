@@ -1,29 +1,12 @@
 const mongoose = require('mongoose');
 const bloodbankSchema = new mongoose.Schema ({
-    name: {
-        type: String,
-        required: true
-    },
-    email: {
-        type: String,
-        lowercase: true,
-        unique: true,
-        required: true,
-        match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
-    },
-    phone: {
-        type: String,
-        required: true,
-        minlength: 10,
-        maxlength: 10,
-        required: true,
-        unique: true,
-        match: [/^\d+$/, 'Please fill a valid phone number']
-    },
-    verified: {
-        type: Boolean,
-        default: false
-    },
+
+   user :{
+     type : mongoose.Schema.ObjectId,
+     ref : 'User',
+     required : true,
+     unique : true
+   },
     stock: {
         ap: {
             type: Number,
@@ -58,23 +41,24 @@ const bloodbankSchema = new mongoose.Schema ({
             default: 0
         }
     },
-    loc: {
-        lat: {
-            type: String,
-            default: '0'
-        },
-        long: {
-            type: String,
-            default: '0'
-        }
-    },
-    verificationnumber: {
-        type: String,
-        minlength: 1,
-        default: '0000000000'
+    address : {
+      housenumber : {
+        type : String
+      },
+      city : {
+        type : String
+      },
+      state : {
+        type : String
+      },
+      country : {
+        type : String
+      },
+      zip :{
+        type : String
+      }
     }
-});
+} , { timestamps : true } );
 
 const Bloodbank = mongoose.model('Bloodbank', bloodbankSchema);
-
 module.exports = Bloodbank;

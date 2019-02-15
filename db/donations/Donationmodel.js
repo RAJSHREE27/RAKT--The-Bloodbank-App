@@ -2,27 +2,27 @@ const mongoose = require('mongoose');
 
 const donationSchema = new mongoose.Schema({
 
-   user_id : {
+   donor_id : {
      type : mongoose.Schema.ObjectId,
-     ref : 'User',
+     ref : 'Donor',
      required : true
    },
-  bloodbank_id : {
+   bloodbank_id : {
      type : mongoose.Schema.ObjectId,
      ref : 'Bloodbank' ,
      required  : true
-   } ,
-  timestamp :{
-     type : Date,
-     default : Date.now
    },
-  quantity : {
+   quantity :{
      type : Number,
      default : 1,
-     min: 1
+     min : 1
+   },
+   date : {
+     type : Date,
+     default : Date.now()
    }
 
-});
+} , { timestamps : true });
 
 const Donations = mongoose.model('Donations', donationSchema);
-module.exports = Donations
+module.exports = Donations;

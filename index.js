@@ -18,6 +18,8 @@ app.use((req, res, next) => {
   }
 );
 
+app.use(require('./routes/authentication.js'));
+
 app.use(routes);
 
 app.listen(port, () => {
