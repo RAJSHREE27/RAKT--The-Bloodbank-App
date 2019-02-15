@@ -56,7 +56,7 @@ const userSchema = new mongoose.Schema({
     }
 }, { timestamps : true });
 
-userSchema.pre('save', (next)=>{
+userSchema.pre('save', function(next){
     var user = this;
     if(!user.isModified('password')){
       return next();
@@ -66,12 +66,12 @@ userSchema.pre('save', (next)=>{
       return next();
     });
 
-} , (err)=>{
+} , function(err){
     next(err);
 });
 
 userSchema.methods.checkPassword = function(candidatePassword , next){
-    bcrypt.compare(candidatePassword , this.password, (err, isMatch) =>{
+    bcrypt.compare(candidatePassword , this.password, function(err, isMatch) {
         if(err){
           return next(err);
         }
