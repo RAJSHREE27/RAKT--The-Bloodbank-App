@@ -1,5 +1,7 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const morgan = require('morgan');
 const routes = require('./routes');
 
 mongoose.Promise = global.Promise;
@@ -18,6 +20,8 @@ app.use((req, res, next) => {
   }
 );
 
+app.use(bodyParser.json());
+app.use(morgan('tiny'));
 app.use(require('./routes/authentication.js'));
 
 app.use(routes);
