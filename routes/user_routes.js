@@ -27,10 +27,21 @@ router.post('/signup', function(req,res,next) {
 router.post('/login', async function( req , res ){
   let email = req.body.email;
   let password = req.body.password;
-  let userobj = await usermodel.findOne({ email : email });
+  let phone = req.body.phone;
+  let userobj;
+  if(email){
+    userobj = await usermodel.findOne({ email : email });
+  }else if(phone){
+    userobj = await usermodel.findOne({ phone : phone });
+  }else{
+    res.send({
+      success : false,
+      message : 'Missing keys!'
+    })
+  }
   let usertype = userobj.usertype;
 
-  if( email && password ){
+  if( userobj && password ){
       userobj.checkPassword(password , async (err , ismatch) =>  {
         if(!err){
             if (usertype==="donor"){
