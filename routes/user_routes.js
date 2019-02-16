@@ -28,18 +28,38 @@ router.post('/login', async function( req , res ){
   let email = req.body.email;
   let password = req.body.password;
   let userobj = await usermodel.findOne({ email : email });
-  if( email && password ){
-      userobj.checkPassword(password , (err , ismatch) =>  {
-        if(!err){
-            let payload = {
-               name : userobj.name,
-               email : userobj.email,
-               phone : userobj.phone,
-               loc : userobj.loc,
-               usertype : userobj.usertype
+  let usertype = userobj.usertype;
 
-            };
-            let token = jwt.sign( payload , process.env.secret , { expiresIn : '48h' });
+  if( email && password ){
+      userobj.checkPassword(password , async (err , ismatch) =>  {
+        if(!err){
+            if (usertype==="donor"){
+              let userprofile = await donormodel.findOne({ user : userobj._id });
+              var payload = {
+                user : {
+                  name : userobj.name,
+                  email : userobj.email,
+                  phone : userobj.phone,
+                  loc : userobj.loc,
+                  usertype : userobj.usertype
+                  },
+                  bloodgroup : userprofile.bloodgroup,
+                  dob : userprofile.dob
+              };
+            }else if (usertype==="bloodbank"){
+              let userprofile = await bloodbankmodel.findOne({ user : userobj._id });
+              var payload = {
+                user : {
+                  name : userobj.name,
+                  email : userobj.email,
+                  phone : userobj.phone,
+                  loc : userobj.loc,
+                  usertype : userobj.usertype
+                },
+                address : userprofile.address,
+              };
+            }
+            let token = jwt.sign( payload , process.env.SECRET , { expiresIn : '48h' });
             res.status(200).send({ success : true , token : token });
         }
       });
