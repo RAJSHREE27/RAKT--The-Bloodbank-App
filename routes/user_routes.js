@@ -12,13 +12,42 @@ router.post('/signup', function(req,res,next) {
     usermodel.create(userdata).then((user)=>{
       req.body.user = user._id;
       if(type === "donor"){
-            donormodel.create(req.body).then(()=>{
-            res.status(200).send({ success : true });
+            donormodel.create(req.body).then((donor)=>{
+              var payload = {
+                user : {
+                  name : user.name,
+                  email : user.email,
+                  phone : user.phone,
+                  loc : user.loc,
+                  usertype : user.usertype
+                  },
+                  bloodgroup : donor.bloodgroup,
+                  dob : donor.dob
+              };
+              let token = jwt.sign( payload , process.env.SECRET , { expiresIn : '48h' });
+              res.status(200).send({
+                success : true,
+                token : token
+              });
           });
        }
        else if(type === "bloodbank"){
-         bloodbankmodel.create(req.body).then(()=>{
-           res.status(200).send({ success : true });
+         bloodbankmodel.create(req.body).then((bloodbank)=>{
+           var payload = {
+             user : {
+               name : user.name,
+               email : user.email,
+               phone : user.phone,
+               loc : user.loc,
+               usertype : user.usertype
+             },
+             address : bloodbank.address,
+           };
+           let token = jwt.sign( payload , process.env.SECRET , { expiresIn : '48h' });
+           res.status(200).send({
+             success : true ,
+             token : token
+           });
          });
        }
     });
