@@ -79,7 +79,7 @@ router.post('/login', async function( req , res ){
               let userprofile = await donormodel.findOne({ user : userobj._id });
               var payload = {
                 user : {
-                  _id : user._id,
+                  _id : userobj._id,
                   name : userobj.name,
                   email : userobj.email,
                   phone : userobj.phone,
@@ -93,7 +93,7 @@ router.post('/login', async function( req , res ){
               let userprofile = await bloodbankmodel.findOne({ user : userobj._id });
               var payload = {
                 user : {
-                  _id : user._id,
+                  _id : userobj._id,
                   name : userobj.name,
                   email : userobj.email,
                   phone : userobj.phone,
