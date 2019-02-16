@@ -29,7 +29,8 @@ router.post('/signup', function(req,res,next) {
               let token = jwt.sign( payload , process.env.SECRET , { expiresIn : '48h' });
               res.status(200).send({
                 success : true,
-                token : token
+                token : token,
+                payload : payload,
               });
           });
        }
@@ -49,7 +50,8 @@ router.post('/signup', function(req,res,next) {
            let token = jwt.sign( payload , process.env.SECRET , { expiresIn : '48h' });
            res.status(200).send({
              success : true ,
-             token : token
+             token : token ,
+             payload : payload
            });
          });
        }
@@ -105,7 +107,7 @@ router.post('/login', async function( req , res ){
               };
             }
             let token = jwt.sign( payload , process.env.SECRET , { expiresIn : '48h' });
-            res.status(200).send({ success : true , token : token });
+            res.status(200).send({ success : true , token : token , payload:payload });
         }
       });
   }
