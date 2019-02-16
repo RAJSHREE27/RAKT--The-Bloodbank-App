@@ -53,6 +53,9 @@ const userSchema = new mongoose.Schema({
     isactive :{
       type : Boolean,
       default : true
+    },
+    notification_tag:{
+      type : String
     }
 }, { timestamps : true });
 

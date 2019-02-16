@@ -42,21 +42,7 @@ const bloodbankSchema = new mongoose.Schema ({
         }
     },
     address : {
-      housenumber : {
-        type : String
-      },
-      city : {
-        type : String
-      },
-      state : {
-        type : String
-      },
-      country : {
-        type : String
-      },
-      zip :{
-        type : String
-      }
+      type: String
     }
 } , { timestamps : true } );
 

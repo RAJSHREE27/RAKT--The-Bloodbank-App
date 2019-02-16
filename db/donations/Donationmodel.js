@@ -2,14 +2,14 @@ const mongoose = require('mongoose');
 
 const donationSchema = new mongoose.Schema({
 
-   donor_id : {
+   donor : {
      type : mongoose.Schema.ObjectId,
-     ref : 'Donor',
+     ref : 'User',
      required : true
    },
-   bloodbank_id : {
+   recipient: {
      type : mongoose.Schema.ObjectId,
-     ref : 'Bloodbank' ,
+     ref : 'User' ,
      required  : true
    },
    quantity :{

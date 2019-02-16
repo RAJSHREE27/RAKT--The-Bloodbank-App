@@ -71,7 +71,6 @@ router.post('/login', async function( req , res ){
     })
   }
   let usertype = userobj.usertype;
-
   if( userobj && password ){
       userobj.checkPassword(password , async (err , ismatch) =>  {
         if(!err){

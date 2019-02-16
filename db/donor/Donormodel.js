@@ -17,7 +17,6 @@ const donorSchema = new mongoose.Schema ({
         required: true
     }
 } , { timestamps : true});
-//created at and updated at
- 
+
 const Donor = mongoose.model('Donor', donorSchema);
 module.exports = Donor;
