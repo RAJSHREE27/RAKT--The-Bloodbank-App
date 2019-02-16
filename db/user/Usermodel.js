@@ -56,6 +56,9 @@ const userSchema = new mongoose.Schema({
     },
     notification_tag:{
       type : String
+    },
+    lastdonatedat:{
+      type : Date
     }
 }, { timestamps : true });
 

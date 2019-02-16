@@ -13,5 +13,7 @@ router.get('/', bodyParser.json(), (req, res) => {
 
 router.use('/user',require('./user_routes'));
 router.use('/bloodbank', require('./bloodbank_routes'));
+router.use('/donations', require('./donations_routes'));
+
 
 module.exports = router;

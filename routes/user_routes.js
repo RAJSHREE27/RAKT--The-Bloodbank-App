@@ -20,10 +20,11 @@ router.post('/signup', function(req,res,next) {
                   email : user.email,
                   phone : user.phone,
                   loc : user.loc,
-                  usertype : user.usertype
+                  usertype : user.usertype,
+                  lastdonatedat : user.lastdonatedat
                   },
                   bloodgroup : donor.bloodgroup,
-                  dob : donor.dob
+                  dob : donor.dob,
               };
               let token = jwt.sign( payload , process.env.SECRET , { expiresIn : '48h' });
               res.status(200).send({
@@ -83,10 +84,11 @@ router.post('/login', async function( req , res ){
                   email : userobj.email,
                   phone : userobj.phone,
                   loc : userobj.loc,
-                  usertype : userobj.usertype
+                  usertype : userobj.usertype,
+                  lastdonatedat : userobj.lastdonatedat
                   },
                   bloodgroup : userprofile.bloodgroup,
-                  dob : userprofile.dob
+                  dob : userprofile.dob,
               };
             }else if (usertype==="bloodbank"){
               let userprofile = await bloodbankmodel.findOne({ user : userobj._id });
