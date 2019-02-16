@@ -21,12 +21,6 @@ const mapping = {
 
 router.post('/write',[isAuthenticated],function(req,res){
   var donor_user = req.decoded;
-  var recipient_user;
-  var recipient_phone = req.body.phone;
-  jwt.verify(req.body.recipient, process.env.SECRET , (err , decoded)=>{
-    recipient_user = decoded;
-  });
-  console.log(recipient_user);
   if(donor_user.user.usertype=="donor"){
     var lastdonatedat;
     usermodel.findOne({_id:donor_user.user._id}).then((user)=>{
@@ -82,7 +76,7 @@ router.post('/write',[isAuthenticated],function(req,res){
   }else if(donor_user.user.usertype=="bloodbank"){
     usermodel.findOne({phone:req.body.phone}).then((user)=>{
       donormodel.findOne({user:user._id}).then((donor)=>{
-        var req_bloodtype = mapping[recipient_user.bloodgroup];
+        var req_bloodtype = mapping[donor.bloodgroup];
         bloodbankmodel.findOne({user : donor_user.user._id}).then((bloodbank)=>{
           if(bloodbank.stock[req_bloodtype] > req.body.quantity){
             bloodbank.stock[req_bloodtype]-=req.body.quantity;
