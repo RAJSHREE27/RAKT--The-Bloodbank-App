@@ -24,7 +24,11 @@ router.post('/write',[isAuthenticated],function(req,res){
   if(donor_user.user.usertype=="donor"){
     var lastdonatedat;
     usermodel.findOne({_id:donor_user.user._id}).then((user)=>{
-      lastdonatedat = user.lastdonatedat;
+      if (!user.lastdonatedat){
+        lastdonatedat = '0'
+      }else{
+        lastdonatedat = user.lastdonatedat;
+      }
       timeafterlastdonation= Date.now() - new Date(lastdonatedat).getTime();
       if (timeafterlastdonation>=(7776000000)){
         usermodel.findOne({phone:req.body.phone}).then((user)=>{
@@ -43,7 +47,7 @@ router.post('/write',[isAuthenticated],function(req,res){
                 user.save();
                 res.status(200).send({
                   sucess: true,
-                  message : "User to Blood Bank Donation Successful"
+                  message : `You successfully donated to ${user.name}`
                 });
               });
             });
@@ -59,14 +63,13 @@ router.post('/write',[isAuthenticated],function(req,res){
                 user.save();
                 return res.send({
                   success : true,
-                  message : "User to User Donation Successful"
+                  message : `You successfully donated to ${user.name}`
                 });
               });
             })
           }
         });
       }else{
-        console.log("inhere");
         return res.send({
           success : false,
           message : "Not 6 month since last donation"
@@ -78,7 +81,7 @@ router.post('/write',[isAuthenticated],function(req,res){
       donormodel.findOne({user:user._id}).then((donor)=>{
         var req_bloodtype = mapping[donor.bloodgroup];
         bloodbankmodel.findOne({user : donor_user.user._id}).then((bloodbank)=>{
-          if(bloodbank.stock[req_bloodtype] > req.body.quantity){
+          if(bloodbank.stock[req_bloodtype] >= req.body.quantity){
             bloodbank.stock[req_bloodtype]-=req.body.quantity;
             bloodbank.save();
             res.send({
