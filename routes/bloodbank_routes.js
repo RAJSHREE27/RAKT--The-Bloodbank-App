@@ -14,11 +14,10 @@ router.get('/stock', [ isAuthenticated , isBloodbank ] , (req, res, next)=>{
     });
 });
 
-router.get('/allstocks', [ isAuthenticated , isBloodbank ] , (req, res , next )=>{
-    console.log(req.decoded);
+router.get('/allstocks', [ isAuthenticated ] , (req, res , next )=>{
     bloodbank.find({}).populate('user', 'name')
       .then((bloodbank)=>{
-        Object.keys(bloodbank).map(function(key , index ){
+        Object.keys(bloodbank).map(function(key , index){
           res.send({ bloodbank });
         });
     });
