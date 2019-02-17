@@ -1,8 +1,10 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
+const haversine = require('haversine')
+
 
 const usermodel = require('../db/user/Usermodel.js');
-const bloodbannkmodel = require('../db/bloodbank/Bloodbankmodel.js');
+const bloodbankmodel = require('../db/bloodbank/Bloodbankmodel.js');
 const donormodel= require('../db/donor/Donormodel.js');
 const isAuthenticated = require('../middleware/IsAuthenticated.js');
 const router = express.Router();
@@ -94,6 +96,7 @@ router.post('/login', async function( req , res ){
                   dob : userprofile.dob,
               };
             }else if (usertype==="bloodbank"){
+              console.log(userobj);
               let userprofile = await bloodbankmodel.findOne({ user : userobj._id });
               var payload = {
                 user : {
@@ -130,6 +133,20 @@ router.post('/notification/set',[ isAuthenticated ] , function(req, res){
   });
 
 
+});
+
+
+router.post('/findnearby',[ isAuthenticated ],function(req,res){
+  donormodel.find({bloodgroup:req.body.bloodgroup}).populate('user').then((donors)=>{
+    nearbydonors = [];
+    for(let donor of donors){
+      if(haversine({latitude:req.decoded.user.loc.lat,longitude:req.decoded.user.loc.long},
+        {latitude:donor.user.loc.lat,longitude:donor.user.loc.long},{threshold: 10000, unit:'meter'})){
+        nearbydonors.push(donor);
+      }
+    }
+    res.send({nearbydonors});
+  });
 });
 
 
