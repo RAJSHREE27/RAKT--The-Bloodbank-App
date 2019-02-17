@@ -96,7 +96,6 @@ router.post('/login', async function( req , res ){
                   dob : userprofile.dob,
               };
             }else if (usertype==="bloodbank"){
-              console.log(userobj);
               let userprofile = await bloodbankmodel.findOne({ user : userobj._id });
               var payload = {
                 user : {
@@ -118,10 +117,8 @@ router.post('/login', async function( req , res ){
 });
 
 router.post('/notification/set',[ isAuthenticated ] , function(req, res){
-  console.log(req.decoded);
   let notif = req.body.notification_tag;
   let locc = req.body.loc;
-  console.log(notif);
   usermodel.findOne({ _id : req.decoded.user._id }).then((user)=>{
     user.notification_tag = notif;
     user.loc = locc;
