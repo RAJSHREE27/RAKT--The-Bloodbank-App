@@ -21,6 +21,10 @@ router.post('/pushnotification',[isAuthenticated],async function(req,res){
   for(let pushToken of somePushTokens){
     if (!Expo.isExpoPushToken(pushToken)) {
       console.error(`Push token ${pushToken} is not a valid Expo push token`);
+      res.send({
+        success : false,
+        message : 'Error occurred'
+      })
       continue;
     }
     messages.push({
@@ -28,6 +32,10 @@ router.post('/pushnotification',[isAuthenticated],async function(req,res){
       sound: 'default',
       body: `${req.decoded.user.name} sent you a request for bloodgroup ${req.body.bloodgroup}`,
       data: { loc : req.body.loc },
+      android:{
+        channelId : 'bloodbank'
+
+      }
     })
   }
   let chunks = expo.chunkPushNotifications(messages);
@@ -40,6 +48,10 @@ router.post('/pushnotification',[isAuthenticated],async function(req,res){
               tickets.push(...ticketChunk);
             } catch (error) {
               console.error(error);
+              res.send({
+                success : false,
+                message : 'Error occurred'
+              })
             }
       }
   })();
@@ -60,16 +72,32 @@ router.post('/pushnotification',[isAuthenticated],async function(req,res){
             continue;
           } else if (receipt.status === 'error') {
             console.error(`There was an error sending a notification: ${receipt.message}`);
+            res.send({
+              success : false,
+              message : 'Error occurred'
+            })
             if (receipt.details && receipt.details.error) {
               console.error(`The error code is ${receipt.details.error}`);
+              res.send({
+                success : false,
+                message : 'Error occurred'
+              })
             }
           }
         }
       } catch (error) {
         console.error(error);
+        res.send({
+          success : false,
+          message : 'Error occurred'
+        })
       }
     }
   })();
+  res.send({
+    success : true,
+    message : 'Notifications sent successfully'
+  })
 
 });
 
