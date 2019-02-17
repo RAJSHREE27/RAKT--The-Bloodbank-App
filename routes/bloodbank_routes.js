@@ -22,4 +22,17 @@ router.get('/allstocks', [ isAuthenticated ] , (req, res , next )=>{
 
 });
 
+router.post('/updatestock', [ isAuthenticated, isBloodbank ], (req , res , next)=>{
+  let bloodbank_stock = req.body.stock;
+  bloodbank.findOne({ user : req.decoded.user._id  }).then((bb)=>{
+    bb.stock = bloodbank_stock;
+    bb.save();
+    res.status(200).send({
+      success : true ,
+       message : "stock updated successfully"
+     });
+  });
+
+});
+
 module.exports = router;
