@@ -46,7 +46,7 @@ router.post('/write',[isAuthenticated],function(req,res){
                 user.lastdonatedat = Date.now();
                 user.save();
                 res.status(200).send({
-                  sucess: true,
+                  success: true,
                   message : `You successfully donated to ${user.name}`
                 });
               });
@@ -102,12 +102,9 @@ router.post('/write',[isAuthenticated],function(req,res){
 
 
 router.get('/find',[isAuthenticated],function(req,res){
-  donationmodel.find({donor:req.decoded.user._id}).then((donations_as_donor)=>{
-    console.log(donations_as_donor);
+  donationmodel.find({donor:req.decoded.user._id}).populate('donor').populate('recipient').then((donations_as_donor)=>{
     donationmodel.find({recipient:req.decoded.user._id}).populate('donor').populate('recipient').then((donations_as_recepient)=>{
-      console.log({recipient:req.decoded.user._id});
-      console.log(donations_as_recepient);
-      res.status(200).send({
+        res.status(200).send({
         success:true,
         donated : donations_as_donor,
         received : donations_as_recepient
