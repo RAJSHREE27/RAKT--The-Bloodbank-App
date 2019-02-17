@@ -19,6 +19,17 @@ const mapping = {
   "AB-":"abn"
 }
 
+const candonate={
+  "A+":["A+","A-","O+","O-"],
+  "A-":["A-","O-"],
+  "B+":["B+","B-","O+","O-"],
+  "B-":["B-","O-"],
+  "O+":["O+","O-"],
+  "O-":["O-"],
+  "AB+":["AB+","AB-","B+","B-","A+","A-","O+","O-"],
+  "AB-":["AB-","B-","A-","O-"]
+}
+
 router.post('/write',[isAuthenticated],function(req,res){
   var donor_user = req.decoded;
   if(donor_user.user.usertype=="donor"){
@@ -57,22 +68,33 @@ router.post('/write',[isAuthenticated],function(req,res){
               recipient : user._id,
               quantity : req.body.quantity
             }
-            donationmodel.create(newdonationsobj).then((donation)=>{
-              usermodel.findOne({_id:donor_user.user._id}).then((user)=>{
-                user.lastdonatedat=Date.now();
-                user.save();
-                return res.send({
-                  success : true,
-                  message : `You successfully donated to ${user.name}`
-                });
+            usermodel.findOne({phone:req.body.phone}).then((user)=>{
+              donormodel.findOne({user:user._id}).then((donor_who_receives)=>{
+                if(candonate[donor_who_receives.bloodgroup].includes(donor_user.bloodgroup)){
+                  donationmodel.create(newdonationsobj).then((donation)=>{
+                    usermodel.findOne({_id:donor_user.user._id}).then((user)=>{
+                      user.lastdonatedat=Date.now();
+                      user.save();
+                      return res.send({
+                        success : true,
+                        message : `You successfully donated to ${user.name}`
+                      });
+                    });
+                  })
+                }else{
+                  return res.send({
+                    success : false,
+                    message : `Incompatible blood types`
+                  });
+                }
               });
-            })
+            });
           }
         });
       }else{
         return res.send({
           success : false,
-          message : "Not 6 month since last donation"
+          message : "Not 3 month since last donation"
         });
       }
     });
