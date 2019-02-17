@@ -2,9 +2,9 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 
 const usermodel = require('../db/user/Usermodel.js');
-const donormodel = require('../db/donor/Donormodel.js');
-const isAuthenticated = require('../db/donor/Donormodel.js');
-const bloodbankmodel = require('../middleware/IsAuthenticated.js');
+const bloodbannkmodel = require('../db/bloodbank/Bloodbankmodel.js');
+const donormodel= require('../db/donor/Donormodel.js');
+const isAuthenticated = require('../middleware/IsAuthenticated.js');
 const router = express.Router();
 
 router.post('/signup', function(req,res,next) {

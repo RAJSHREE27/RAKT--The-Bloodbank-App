@@ -1,4 +1,4 @@
-import Expo from 'expo-server-sdk';
+const { Expo } = require('expo-server-sdk');
 const express = require('express');
 const isAuthenticated = require('../middleware/IsAuthenticated');
 const usermodel = require('../db/user/Usermodel');
@@ -10,11 +10,12 @@ let expo = new Expo();
 const router = express.Router();
 
 
-router.post('/pushnotificaton',[isAuthenticated],async function(req,res){
+router.post('/pushnotification',[isAuthenticated],async function(req,res){
   let somePushTokens = [];
   for (let phone of req.body.phonenumbers){
-    user = await usermodel.findOne({phone:req.body.phone})
-    phone_numbers.push(notification_tag);
+    user = await usermodel.findOne({phone:phone})
+    console.log(user);
+    somePushTokens.push(user.notification_tag);
   }
   let messages = [];
   for(let pushToken of somePushTokens){
@@ -71,3 +72,5 @@ router.post('/pushnotificaton',[isAuthenticated],async function(req,res){
   })();
 
 });
+
+module.exports = router;
