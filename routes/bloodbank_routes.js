@@ -14,14 +14,8 @@ router.get('/stock', [ isAuthenticated , isBloodbank ] , (req, res, next)=>{
     });
 });
 
-<<<<<<< HEAD
 router.get('/allstocks', [ isAuthenticated ] , (req, res , next )=>{
     bloodbank.find({}).populate('user', 'name')
-=======
-router.get('/allstocks', [ isAuthenticated , isBloodbank ] , (req, res , next )=>{
-    console.log(req.decoded);
-    bloodbank.find({}).populate('user', 'name', 'loc')
->>>>>>> 3b735d4394f7b5b403f4bb115db41dd5df77be0c
       .then((bloodbank)=>{
         Object.keys(bloodbank).map(function(key , index){
           res.send({ bloodbank });
