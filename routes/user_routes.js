@@ -114,7 +114,7 @@ router.post('/login', async function( req , res ){
   }
 });
 
-router.post('/notification/set',[ isAuthenticated ] , function(req, res)=>{
+router.post('/notification/set',[ isAuthenticated ] , function(req, res){
   console.log(req.decoded);
   let notif = req.body.notification_tag;
   console.log(notif);
