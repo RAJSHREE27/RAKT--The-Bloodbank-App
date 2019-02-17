@@ -15,11 +15,9 @@ router.get('/stock', [ isAuthenticated , isBloodbank ] , (req, res, next)=>{
 });
 
 router.get('/allstocks', [ isAuthenticated ] , (req, res , next )=>{
-    bloodbank.find({}).populate('user', 'name')
+    bloodbank.find({}).populate('user')
       .then((bloodbank)=>{
-        Object.keys(bloodbank).map(function(key , index){
-          res.send({ bloodbank });
-        });
+          res.send({bloodbank});
     });
 
 });
