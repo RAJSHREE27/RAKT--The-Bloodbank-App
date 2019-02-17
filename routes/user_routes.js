@@ -117,9 +117,11 @@ router.post('/login', async function( req , res ){
 router.post('/notification/set',[ isAuthenticated ] , function(req, res){
   console.log(req.decoded);
   let notif = req.body.notification_tag;
+  let locc = req.body.loc;
   console.log(notif);
   usermodel.findOne({ _id : req.decoded.user._id }).then((user)=>{
     user.notification_tag = notif;
+    user.loc = locc;
     user.save();
     res.status(200).send({
       success : true,
